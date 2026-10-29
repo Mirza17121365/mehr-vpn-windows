@@ -64,7 +64,7 @@ public class OpenVpnController
         var args = new StringBuilder();
         args.Append("--config \"").Append(profilePath).Append("\" ");
         args.Append("--management 127.0.0.1 ").Append(mgmtPort).Append(' ');
-        args.Append("--verb 3 ");
+                args.Append("--verb 4 --mute 0 --disable-dco ");
 
         _authFile = null;
         if (!string.IsNullOrEmpty(user))
