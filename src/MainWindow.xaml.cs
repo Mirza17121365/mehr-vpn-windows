@@ -68,7 +68,7 @@ public partial class MainWindow : Window
         _timer.Start();
 
         Closing += MainWindow_Closing;
-        SessionEnding += (s, e) => _cm.ShutdownBlocking();
+           Application.Current.SessionEnding += (s, e) => _cm.ShutdownBlocking();
 
         _loading = false;
         RefreshSettingsInfo();
