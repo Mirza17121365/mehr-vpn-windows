@@ -1,0 +1,260 @@
+<Window x:Class="MehrVpn.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Mehr VPN" Width="1000" Height="660" MinWidth="880" MinHeight="580"
+        FlowDirection="RightToLeft" Background="{StaticResource Bg}"
+        FontFamily="Vazirmatn, Segoe UI, Tahoma" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ================= navigation ================= -->
+        <Border Grid.Column="0" Background="{StaticResource Bg}" BorderBrush="{StaticResource Line}" BorderThickness="1,0,0,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="22,26,22,26">
+                    <TextBlock Text="مهراسپند" FontSize="22" FontWeight="Bold"/>
+                    <TextBlock Text="OpenVPN + v2ray" Foreground="{StaticResource Muted}" FontSize="12"
+                               FlowDirection="LeftToRight" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Top">
+                    <RadioButton x:Name="NavHome" Style="{StaticResource Nav}" Content="خانه" GroupName="nav" IsChecked="True" Checked="Nav_Checked" Tag="Home"/>
+                    <RadioButton x:Name="NavServers" Style="{StaticResource Nav}" Content="سرورها" GroupName="nav" Checked="Nav_Checked" Tag="Servers"/>
+                    <RadioButton x:Name="NavApps" Style="{StaticResource Nav}" Content="برنامه‌ها" GroupName="nav" Checked="Nav_Checked" Tag="Apps"/>
+                    <RadioButton x:Name="NavSettings" Style="{StaticResource Nav}" Content="تنظیمات" GroupName="nav" Checked="Nav_Checked" Tag="Settings"/>
+                    <RadioButton x:Name="NavLogs" Style="{StaticResource Nav}" Content="لاگ" GroupName="nav" Checked="Nav_Checked" Tag="Logs"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ================= pages ================= -->
+        <Grid Grid.Column="1" Margin="36,30,36,30">
+
+            <!-- Home page -->
+            <Grid x:Name="PageHome">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="420">
+                    <Button x:Name="PowerButton" Style="{StaticResource PowerButton}" Click="Power_Click"
+                            HorizontalAlignment="Center" Margin="0,0,0,26"/>
+                    <TextBlock x:Name="StatusText" Text="قطع" FontSize="26" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock x:Name="ServerText" Text="" Foreground="{StaticResource Muted}"
+                               HorizontalAlignment="Center" TextAlignment="Center" Margin="0,6,0,0"/>
+
+                    <Border BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Margin="0,30,0,0" Padding="0,18,0,0">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse x:Name="DotOvpn" Width="10" Height="10" Fill="{StaticResource Muted}" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                                    <TextBlock Text="OpenVPN" Margin="10,0,0,0"/>
+                                </StackPanel>
+                                <TextBlock x:Name="OvpnState" Grid.Column="1" Text="قطع" Foreground="{StaticResource Muted}"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse x:Name="DotV2" Width="10" Height="10" Fill="{StaticResource Muted}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="v2ray" Margin="10,0,0,0"/>
+                                </StackPanel>
+                                <TextBlock x:Name="V2State" Grid.Column="1" Text="قطع" Foreground="{StaticResource Muted}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Margin="0,14,0,0" FlowDirection="LeftToRight">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                            <TextBlock Text="DOWNLOAD" Foreground="{StaticResource Muted}" FontSize="10" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="DownText" Text="0 KB/s" FontSize="16" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="UPLOAD" Foreground="{StaticResource Muted}" FontSize="10" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="UpText" Text="0 KB/s" FontSize="16" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                            <TextBlock Text="TIME" Foreground="{StaticResource Muted}" FontSize="10" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TimeText" Text="00:00:00" FontSize="16" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- Servers page -->
+            <Grid x:Name="PageServers" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="سرورهای v2ray" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,16"/>
+
+                <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                    <WrapPanel>
+                        <Button Content="افزودن از کلیپ‌بورد" Click="AddClipboard_Click"/>
+                        <Button Content="تست پینگ همه" Click="PingAll_Click"/>
+                        <Button Content="حذف انتخاب‌شده" Click="RemoveServer_Click"/>
+                    </WrapPanel>
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="LinkBox" FlowDirection="LeftToRight"/>
+                        <Button Grid.Column="1" Content="افزودن لینک" Margin="8,0,0,0" Click="AddLink_Click"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="RenameBox"/>
+                        <Button Grid.Column="1" Content="تغییر نام" Margin="8,0,0,0" Click="Rename_Click"/>
+                    </Grid>
+                </StackPanel>
+
+                <ListBox x:Name="ServerList" Grid.Row="2" SelectionChanged="ServerList_SelectionChanged"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="190"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Protocol}" Foreground="{StaticResource Muted}"
+                                           FlowDirection="LeftToRight"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Address}" Foreground="{StaticResource Muted}"
+                                           FlowDirection="LeftToRight" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock Grid.Column="3" Text="{Binding PingText}" FlowDirection="LeftToRight"
+                                           HorizontalAlignment="Right"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <TextBlock Grid.Row="3" Margin="0,10,0,0" Foreground="{StaticResource Muted}" FontSize="12"
+                           Text="سرور انتخاب‌شده، سرور فعال است. پینگ از نوع TCP است و اگر OpenVPN وصل باشد از داخل تونل اداره گرفته می‌شود."/>
+            </Grid>
+
+            <!-- Apps page -->
+            <Grid x:Name="PageApps" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="مسیر برنامه‌ها" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,12"/>
+
+                <StackPanel Grid.Row="1" Margin="0,0,0,14">
+                    <RadioButton x:Name="ModePerApp" Content="فقط برنامه‌های انتخاب‌شده از v2ray رد شوند، بقیه فقط OpenVPN (TUN)" GroupName="mode" Checked="Mode_Checked" Tag="PerApp"/>
+                    <RadioButton x:Name="ModeAll" Content="همه‌ی برنامه‌ها از v2ray رد شوند (TUN)" GroupName="mode" Checked="Mode_Checked" Tag="AllApps"/>
+                    <RadioButton x:Name="ModeProxy" Content="حالت پراکسی سیستم، بدون TUN و بدون انتخاب برنامه (برای عیب‌یابی)" GroupName="mode" Checked="Mode_Checked" Tag="SystemProxy"/>
+                </StackPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="برنامه‌های v2ray" Foreground="{StaticResource Muted}" Margin="0,0,0,8"/>
+                        <ListBox x:Name="ProxyAppsList" Grid.Row="1" FlowDirection="LeftToRight"/>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="حذف" Click="RemoveApp_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="برنامه‌های در حال اجرا" Foreground="{StaticResource Muted}" Margin="0,0,0,8"/>
+                        <TextBox x:Name="AppFilter" Grid.Row="1" Margin="0,0,0,8" FlowDirection="LeftToRight" TextChanged="AppFilter_TextChanged"/>
+                        <ListBox x:Name="RunningList" Grid.Row="2" FlowDirection="LeftToRight" MouseDoubleClick="RunningList_DoubleClick"/>
+                        <WrapPanel Grid.Row="3" Margin="0,8,0,0">
+                            <Button Content="افزودن" Click="AddApp_Click"/>
+                            <Button Content="تازه‌سازی" Click="RefreshApps_Click"/>
+                            <Button Content="انتخاب فایل exe…" Click="BrowseApp_Click"/>
+                        </WrapPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <!-- Settings page -->
+            <ScrollViewer x:Name="PageSettings" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel MaxWidth="560" HorizontalAlignment="Right">
+                    <TextBlock Text="تنظیمات" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,16"/>
+
+                    <TextBlock Text="OpenVPN" Foreground="{StaticResource Muted}" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="ChkOvpn" Content="هنگام اتصال، OpenVPN اداره هم وصل شود" Checked="ChkOvpn_Changed" Unchecked="ChkOvpn_Changed"/>
+                    <TextBlock x:Name="ProfileText" Margin="0,6,0,8" Foreground="{StaticResource Muted}"/>
+                    <WrapPanel>
+                        <Button Content="انتخاب فایل .ovpn" Click="ImportProfile_Click"/>
+                        <Button x:Name="InstallOvpnBtn" Content="نصب OpenVPN" Click="InstallOvpn_Click"/>
+                    </WrapPanel>
+                    <TextBlock x:Name="OvpnExeText" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,12"/>
+
+                    <TextBlock Text="نام کاربری و رمز (فقط اگر پروفایل بخواهد)" Foreground="{StaticResource Muted}" Margin="0,8,0,6"/>
+                    <TextBox x:Name="UserBox" FlowDirection="LeftToRight" Margin="0,0,0,8"/>
+                    <PasswordBox x:Name="PassBox" FlowDirection="LeftToRight" Margin="0,0,0,8"/>
+                    <Button Content="ذخیره‌ی نام کاربری و رمز" Click="SaveCreds_Click"/>
+
+                    <TextBlock Text="v2ray" Foreground="{StaticResource Muted}" Margin="0,18,0,8"/>
+                    <TextBlock x:Name="SingBoxText" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,8"/>
+                    <TextBlock Text="پورت پراکسی محلی (فقط حالت پراکسی سیستم)" Margin="0,0,0,6"/>
+                    <TextBox x:Name="PortBox" Width="120" HorizontalAlignment="Right" FlowDirection="LeftToRight" LostFocus="PortBox_LostFocus"/>
+
+                    <TextBlock Text="پوشه‌ی داده‌ها" Foreground="{StaticResource Muted}" Margin="0,18,0,6"/>
+                    <TextBlock x:Name="DataDirText" FlowDirection="LeftToRight" FontSize="12" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Logs page -->
+            <Grid x:Name="PageLogs" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="لاگ" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                <WrapPanel Grid.Row="1">
+                    <Button Content="کپی همه" Click="CopyLog_Click"/>
+                    <Button Content="پاک کردن" Click="ClearLog_Click"/>
+                    <Button Content="اطلاعات شبکه (route / ipconfig)" Click="Diag_Click"/>
+                    <Button Content="باز کردن پوشه‌ی داده‌ها" Click="OpenData_Click"/>
+                </WrapPanel>
+                <TextBox x:Name="LogBox" Grid.Row="2" IsReadOnly="True" FlowDirection="LeftToRight"
+                         FontFamily="Consolas" FontSize="12" TextWrapping="NoWrap"
+                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>
